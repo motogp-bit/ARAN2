@@ -17,6 +17,7 @@ def lagrange(x):
         sum+=temp*np.sin(arr[i])
     return sum
 
+'''
 def splines(x):
     while (x>np.pi):
         x-=np.pi
@@ -65,7 +66,7 @@ def splines(x):
         ai =
     print(A)
 splines(0)  
-'''
+
 def splines(x):
     while (x>np.pi):
         x-=np.pi
@@ -111,10 +112,52 @@ def splines(x):
         b.append(y[i+1])
         '''
 
-           
+#This is the ai solution
+def splines(x):
+    def cubic_spline_coefficients(x, y):
+        n = len(x) - 1  
+        coefficients = []
+        h = np.diff(x)
+        delta = np.diff(y) / h
+        lower_diagonal = h[:-2]
+        main_diagonal = np.concatenate(([h[0] + h[1]], 2 * (h[1:-1] + h[:-2]), [h[-2] + h[-3]]))
+        upper_diagonal = h[1:-1]
 
-            
-                
+        A = np.diag(lower_diagonal, -1) + np.diag(main_diagonal, 0) + np.diag(upper_diagonal, 1)
+        B = 6 * np.diff(delta)
+
+        m = np.zeros(n+1)
+        m[1:-1] = np.linalg.solve(A, B)
+
+        for i in range(n):
+            hi = x[i+1] - x[i]
+
+            A_i = np.array([
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, hi, 2*hi**2, 3*hi**3],
+                [0, 0, 2, 6*hi],
+            ])
+
+            b_i = np.array([y[i], y[i+1], m[i], m[i+1]])
+            x_i = np.linalg.solve(A_i, b_i)
+            coefficients.append(x_i)
+
+        return coefficients           
+#ai solution ends
+    c = 0
+    for i in range(len(arr) - 1):
+        if x >= arr[i] and x <= arr[i+1]
+        c = i
+        break
+    d = 0
+    s = 0
+    for elem in cubic_spline_coefficients(arr,[np.sin(x) for x in arr])[c]:
+        s+= elem*pow(x,d)
+        d+=1
+    return s
+    
+
         
 
 def lsquares(x,k):
@@ -150,4 +193,3 @@ def lsquares(x,k):
     return evaluation(np.linalg.solve(A,b),x)
 print(lsquares(2,6))
 
-   
