@@ -65,6 +65,52 @@ def splines(x):
         ai =
     print(A)
 splines(0)  
+'''
+def splines(x):
+    while (x>np.pi):
+        x-=np.pi
+    while (x<-(np.pi)):
+        x+=np.pi
+    ai = []
+    bi = []
+    ci = []
+    di = []
+    hi = []
+    yi = []
+    for i in range(9):
+        hi.append(arr[i+1] - arr[i])
+        yi.append(sin(arr[i]))
+    yi.append(sin(arr[9]))
+    for i in range(9):
+        A = []
+        temp1= []
+        temp1.append(1)
+        for j in range(1,4):
+            temp1.append(0)
+        A.append(temp1)
+        temp2 = []
+        temp2.append(h[i])
+        temp2.append(1)
+        temp2.append(h[i]**2)
+        temp2.append(h[i]**3)
+        A.append(temp2)
+        temp3 = []
+        temp3.append(0)
+        temp3.append(1)
+        temp3.append(2*h[i])
+        temp3.append(3*(h[i]**2))
+        A.append(temp3)
+        temp4 = []
+        temp4.append(0)
+        temp4.append(0)
+        temp4.append(2)
+        temp4.append(6*h[i])
+        A.append(temp4)
+        b = []
+        b.append(y[i])
+        b.append(y[i+1])
+        '''
+
            
 
             
