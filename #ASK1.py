@@ -1,44 +1,107 @@
 #ASK1
 import numpy as np 
 
-arr = [-(np.pi),-3*(np.pi)/4.0,-(np.pi)/2.0,-(np.pi)/4.0,-(np.pi)/6.0,(np.pi)/6.0,(np.pi)/2.0,(np.pi)/4.0,3*(np.pi)/4.0,np.pi]
-sinarr = [np.sin(x) for x in arr]
-sinarr[0] = 0.0
-sinarr[9] = 0.0
+arr = [-(np.pi),-3*(np.pi)/4.0,-(np.pi)/2.0,-(np.pi)/4.0,-(np.pi)/6.0,(np.pi)/6.0,(np.pi)/4.0,(np.pi)/2.0,3*(np.pi)/4.0,np.pi]
 def lagrange(x):
     while (x>np.pi):
         x-=np.pi
     while (x<-(np.pi)):
         x+=np.pi
-    sum = 0.0
-    c = 0
+    sum = 0
     for i in range(10):
-        temp = 0.0
+        temp = 1
         for j in range(10):
-            if j==c:
+            if j==i:
                 continue
-            temp += (x-arr[j])/(arr[c]-arr[j])
-        c+=1
-        sum+=temp*sinarr[i]
+            temp *= (x-arr[j])/(arr[i]-arr[j])
+        sum+=temp*np.sin(arr[i])
     return sum
-x = [k for k in range(10)]
-y = [lagrange(k) for k in range(10)]
 
 def splines(x):
-    a = []
-    b = []
-    c = []
-    d = []
-    for s in range(9):
-        if (s == 1 or s == 8):
-            d.append(d[s-1]) #not a knot
-        else:
-            d.append(sinarr[s])
+    while (x>np.pi):
+        x-=np.pi
+    while (x<-(np.pi)):
+        x+=np.pi
+    a = [np.sin(x) for x in arr]
+    A = []
     h = []
-    y = []
     for i in range(9):
         h.append(arr[i+1] - arr[i])
-        y.append(sinarr[i+1] - sinarr[i])
+    c = 0
+    for i in range(10):
+        row = []
+        if i == 0:
+            row.append(1)
+            for j in range(1,10):
+                row.append(0)
+        elif i == 9:
+            for j in range(9):
+                row.append(0)
+            row.append(1)
+        else:
+            for j in range(10):
+                if j == c:
+                    row.append(h[c])
+                elif j == c+1:
+                    row.append(2*(h[c] + h[c+1]))
+                elif j == c+2:
+                    row.append(h[c+1])
+                else:
+                    row.append(0)
+            c+=1   
+        A.append(row)
+    b = []
+    di = []
+    for i in range(10):
+        di.append(np.sin(arr[i]))
+    for i in range(10):
+        if i == 0 or i == 9:
+            b.append(0)
+        else:
+            b.append((3/h[i])*(di[i+1] - di[i]) - (3/h[i-1])* (di[i] - di[i-1]))
+    bi = np.linalg.solve(A,b)
+    ai = []
+    for i in range(10):
+        ai =
+    print(A)
+splines(0)  
+           
+
+            
+                
         
-def lsquares(x):
-    
+
+def lsquares(x,k):
+    while (x>np.pi):
+        x-=np.pi
+    while (x<-(np.pi)):
+        x+=np.pi
+    A= []
+    for i in range(k):
+        row = []
+        for j in range(k):
+            if j ==0 and i == 0:
+                row.append(10)
+            else:
+                sum = 0
+                for z in arr:
+                    sum += pow(z,i+j)
+                row.append(sum)
+        A.append(row)
+    b = []
+    for i in range(k):
+        sum = 0
+        for j in arr:
+            sum+= pow(j,i) * np.sin(j-1)
+        b.append(sum)
+    def evaluation(coefs,x):
+        d = 0
+        s = 0   
+        for coef in coefs:
+            s+= coef*pow(x,d)
+            d+=1
+        return s 
+    return evaluation(np.linalg.solve(A,b),x)
+print(lsquares(2,6))
+
+   
