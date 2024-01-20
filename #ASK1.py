@@ -16,8 +16,10 @@ def lagrange(x):
             temp *= (x-arr[j])/(arr[i]-arr[j])
         sum+=temp*np.sin(arr[i])
     return sum
-n = 10
+#print(lagrange(2))
+
 def splines(x):
+    n = 10
     while (x>np.pi):
         x-=np.pi
     while (x<-(np.pi)):
@@ -68,7 +70,7 @@ def splines(x):
         if (x >= arr[i] and x <= arr[i+1]):
             interval = i
     return a[interval] * x + b[interval] * (x - arr[interval]) + c[interval] * ((x-arr[interval])**2) + d[interval] * ((x - arr[interval])**3)
-
+#print(splines(2))
         
 
 def lsquares(x,k):
@@ -102,5 +104,5 @@ def lsquares(x,k):
             d+=1
         return s 
     return evaluation(np.linalg.solve(A,b),x)
-
+#print(lsquares(2,10))
 
