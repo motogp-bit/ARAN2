@@ -22,7 +22,6 @@ def trapezoid():
     sum= np.sin(0) + np.sin(np.pi/2)
     for i in range(1,10):
         sum+= 2*np.sin(arr[i])
-        print(sum)
     sum*= step/2
     return sum
 #print(trapezoid())

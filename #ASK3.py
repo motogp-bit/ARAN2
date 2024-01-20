@@ -8,9 +8,9 @@ points2 = [0.117,0.116,0.119,0.117,0.115,0.115,0.115,0.114,0.116,0.116] #KAIROME
 n = 10
 def polyfit(data,k):
     A= []
-    for i in range(k):
+    for i in range(k+1):
         row = []
-        for j in range(k):
+        for j in range(k+1):
             if j ==0 and i == 0:
                 row.append(n)
             else:
@@ -20,7 +20,7 @@ def polyfit(data,k):
                 row.append(sum)
         A.append(row)
     b = []
-    for i in range(k):
+    for i in range(k+1):
         sum = 0
         for j in pointsx:
             sum+= pow(j,i) * data[j-1]

@@ -182,9 +182,9 @@ def lsquares(x,k):
     while (x<-(np.pi)):
         x+=np.pi
     A= []
-    for i in range(k):
+    for i in range(k+1):
         row = []
-        for j in range(k):
+        for j in range(k+1):
             if j ==0 and i == 0:
                 row.append(10)
             else:
@@ -194,10 +194,10 @@ def lsquares(x,k):
                 row.append(sum)
         A.append(row)
     b = []
-    for i in range(k):
+    for i in range(k+1):
         sum = 0
         for j in arr:
-            sum+= pow(j,i) * np.sin(j-1)
+            sum+= pow(j,i) * np.sin(j)
         b.append(sum)
     def evaluation(coefs,x):
         d = 0
