@@ -113,50 +113,66 @@ def splines(x):
         '''
 
 #This is the ai solution
-def splines(x):
+def splines(x0):
     def cubic_spline_coefficients(x, y):
-        n = len(x) - 1  
+        n = len(x) - 1  # Number of intervals
         coefficients = []
+
+    # Compute second derivatives (m_i) using not-a-knot condition
         h = np.diff(x)
         delta = np.diff(y) / h
-        lower_diagonal = h[:-2]
-        main_diagonal = np.concatenate(([h[0] + h[1]], 2 * (h[1:-1] + h[:-2]), [h[-2] + h[-3]]))
-        upper_diagonal = h[1:-1]
+        lambda_ = np.zeros(n-1)
+        mu = np.zeros(n-1)
+        d = np.zeros(n-1)
 
-        A = np.diag(lower_diagonal, -1) + np.diag(main_diagonal, 0) + np.diag(upper_diagonal, 1)
-        B = 6 * np.diff(delta)
+        for i in range(1, n):
+            lambda_[i-1] = h[i-1] / (h[i-1] + h[i])
+            mu[i-1] = h[i] / (h[i-1] + h[i])
+            d[i-1] = 6 * (delta[i] - delta[i-1]) / (h[i-1] + h[i])
+
+    # Create tridiagonal matrix and solve for second derivatives (m_i)
+        tridiagonal_matrix = np.zeros((n-1, n-1))
+        np.fill_diagonal(tridiagonal_matrix, 2)
+        np.fill_diagonal(tridiagonal_matrix[:, 1:], mu)
+        np.fill_diagonal(tridiagonal_matrix[:, :-1], lambda_)
 
         m = np.zeros(n+1)
-        m[1:-1] = np.linalg.solve(A, B)
+        m[1:-1] = np.linalg.solve(tridiagonal_matrix, d)
 
+    # Calculate coefficients for each interval
         for i in range(n):
             hi = x[i+1] - x[i]
 
             A_i = np.array([
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-                [0, hi, 2*hi**2, 3*hi**3],
-                [0, 0, 2, 6*hi],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, hi, 2*hi**2, 3*hi**3],
+            [0, 0, 2, 6*hi],
             ])
 
             b_i = np.array([y[i], y[i+1], m[i], m[i+1]])
+
+        # Solve for coefficients using numpy's linear algebra solver (numpy.linalg.solve)
             x_i = np.linalg.solve(A_i, b_i)
             coefficients.append(x_i)
 
-        return coefficients           
+        return coefficients          
 #ai solution ends
+    while (x0>np.pi):
+        x-=np.pi
+    while (x0<-(np.pi)):
+        x0+=np.pi
     c = 0
     for i in range(len(arr) - 1):
-        if x >= arr[i] and x <= arr[i+1]
-        c = i
-        break
+        if x0 >= arr[i] and x0 <= arr[i+1]:
+            c = i
+            break
     d = 0
     s = 0
-    for elem in cubic_spline_coefficients(arr,[np.sin(x) for x in arr])[c]:
-        s+= elem*pow(x,d)
+    for elem in cubic_spline_coefficients(arr,[np.sin(m) for m in arr])[c]:
+        s+= elem*pow(x0,d)
         d+=1
     return s
-    
 
         
 
@@ -191,5 +207,5 @@ def lsquares(x,k):
             d+=1
         return s 
     return evaluation(np.linalg.solve(A,b),x)
-print(lsquares(2,6))
+
 
